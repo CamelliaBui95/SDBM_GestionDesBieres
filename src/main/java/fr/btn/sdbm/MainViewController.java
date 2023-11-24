@@ -1,13 +1,18 @@
 package fr.btn.sdbm;
 
 import fr.btn.sdbm.metier.Article;
+import fr.btn.sdbm.metier.Couleur;
+import fr.btn.sdbm.metier.Type;
 import fr.btn.sdbm.service.ArticleBean;
+import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import org.controlsfx.control.SearchableComboBox;
 
 public class MainViewController {
     @FXML
@@ -44,7 +49,14 @@ public class MainViewController {
     private Label typeText;
     @FXML
     private TextField searchField;
+    @FXML
+    private SearchableComboBox couleurSearchBox;
+    @FXML
+    private SearchableComboBox typeSearchBox;
     private SortedList<Article> articleSortedList;
+
+    private FilteredList<Couleur> couleurFilteredList;
+    private FilteredList<Type> typeFilteredList;
 
     private ArticleBean bean;
     @FXML
@@ -55,7 +67,8 @@ public class MainViewController {
         this.titrageCol.setCellValueFactory(cell -> cell.getValue().titrageProperty().asString());
 
         articlesTable.getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> showArticleDetail(n));
-        searchField.textProperty().addListener((ob, o, n) -> bean.setFilteredPredicate(n));
+        searchField.textProperty().addListener((ob, o, n) -> bean.setFilteredPredicateArticles(n));
+
     }
 
     public void showArticleDetail(Article article) {
@@ -80,6 +93,24 @@ public class MainViewController {
         this.articleSortedList = this.bean.getSortedArticles();
         this.articleSortedList.comparatorProperty().bind(articlesTable.comparatorProperty());
         articlesTable.setItems(this.articleSortedList);
+
+       this.couleurFilteredList = this.bean.getFilteredCouleurs();
+       this.couleurSearchBox.setItems(this.couleurFilteredList);
+
+       this.typeFilteredList = this.bean.getFilteredTypes();
+       this.typeSearchBox.setItems(this.typeFilteredList);
+
+    }
+
+    @FXML
+    private void onSelectedColor(ActionEvent event) {
+        //String selected = couleurSearchBox.getSelectionModel().getSelectedItem().toString();
+        System.out.println(couleurSearchBox.getValue());
+    }
+
+    @FXML
+    private void onSelectedType(ActionEvent event) {
+        System.out.println(typeSearchBox.getValue());
     }
 
 }

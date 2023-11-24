@@ -24,7 +24,7 @@
 
 <!-- fx:controller="fr.btn.sdbm.MainView"-->
 
-<BorderPane minHeight="800.0" minWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.btn.sdbm.MainViewController">
+<BorderPane minHeight="800.0" minWidth="1200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.btn.sdbm.MainViewController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -64,29 +64,19 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <MenuButton fx:id="couleurBtn" layoutX="329.0" layoutY="74.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Couleur">
-                          <items>
-                            <MenuItem mnemonicParsing="false" text="Action 1" />
-                            <MenuItem mnemonicParsing="false" text="Action 2" />
-                          </items>
-                        </MenuButton>
                         <RangeSlider layoutX="74.0" layoutY="79.0" majorTickUnit="5.0" max="30.0" minorTickCount="1" prefHeight="14.0" prefWidth="246.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
-                        <MenuButton layoutX="329.0" layoutY="110.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Continent">
+                        <MenuButton fx:id="paysSearchBox" layoutX="464.0" layoutY="110.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Pays">
                           <items>
                             <MenuItem mnemonicParsing="false" text="Action 1" />
                             <MenuItem mnemonicParsing="false" text="Action 2" />
                           </items>
                         </MenuButton>
-                        <MenuButton layoutX="464.0" layoutY="110.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Pays">
-                          <items>
-                            <MenuItem mnemonicParsing="false" text="Action 1" />
-                            <MenuItem mnemonicParsing="false" text="Action 2" />
-                          </items>
-                        </MenuButton>
-                        <SearchableComboBox layoutX="464.0" layoutY="39.0" prefHeight="25.0" prefWidth="122.0" promptText="Contenance" />
-                        <SearchableComboBox layoutX="464.0" layoutY="74.0" prefHeight="25.0" prefWidth="122.0" promptText="Type Biere" />
-                        <SearchableComboBox layoutX="63.0" layoutY="110.0" prefHeight="25.0" prefWidth="122.0" promptText="Fabricant" />
-                        <SearchableComboBox layoutX="197.0" layoutY="110.0" prefHeight="25.0" prefWidth="122.0" promptText="Marque" />
+                        <SearchableComboBox fx:id="contenanceSearchBox" layoutX="464.0" layoutY="39.0" prefHeight="25.0" prefWidth="122.0" promptText="Contenance" />
+                        <SearchableComboBox fx:id="typeSearchBox" layoutX="464.0" layoutY="74.0" onAction="#onSelectedType" prefHeight="25.0" prefWidth="122.0" promptText="Type Biere" />
+                        <SearchableComboBox fx:id="fabricantSearchBox" layoutX="63.0" layoutY="110.0" prefHeight="25.0" prefWidth="122.0" promptText="Fabricant" />
+                        <SearchableComboBox fx:id="marqueSearchBox" layoutX="197.0" layoutY="110.0" prefHeight="25.0" prefWidth="122.0" promptText="Marque" />
+                        <SearchableComboBox fx:id="couleurSearchBox" layoutX="329.0" layoutY="74.0" onAction="#onSelectedColor" prefHeight="25.0" prefWidth="122.0" promptText="Couleur" />
+                        <SearchableComboBox fx:id="continentSearchBox" layoutX="329.0" layoutY="110.0" prefHeight="25.0" prefWidth="122.0" promptText="Continent" />
                      </children>
                   </AnchorPane>
                   <TableView fx:id="articlesTable" prefHeight="400.0" prefWidth="302.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">

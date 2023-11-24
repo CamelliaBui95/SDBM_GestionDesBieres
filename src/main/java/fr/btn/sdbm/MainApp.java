@@ -15,12 +15,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MainApp extends Application {
-    private ArticleDAO articleDAO;
     private ArticleBean bean;
 
     public MainApp() {
-        articleDAO = new ArticleDAO();
-        bean = new ArticleBean(articleDAO);
+        bean = new ArticleBean();
     }
     @Override
     public void start(Stage stage) throws Exception {
