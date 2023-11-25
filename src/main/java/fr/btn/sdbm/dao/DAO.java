@@ -4,11 +4,12 @@ import java.sql.Connection;
 import java.util.ArrayList;
 
 
-public abstract class DAO<T> {
+public abstract class DAO<T, TSearch> {
     protected Connection connection;
 
     public DAO() {
         connection = SBDMConnect.getInstance();
     }
     public abstract ArrayList<T> getAll();
+    public abstract ArrayList <T> getLike(TSearch objet);
 }

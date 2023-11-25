@@ -6,7 +6,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -24,7 +23,7 @@
 
 <!-- fx:controller="fr.btn.sdbm.MainView"-->
 
-<BorderPane minHeight="800.0" minWidth="1200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.btn.sdbm.MainViewController">
+<BorderPane minHeight="800.0" minWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.btn.sdbm.MainViewController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -64,22 +63,17 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <RangeSlider layoutX="74.0" layoutY="79.0" majorTickUnit="5.0" max="30.0" minorTickCount="1" prefHeight="14.0" prefWidth="246.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
-                        <MenuButton fx:id="paysSearchBox" layoutX="464.0" layoutY="110.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="122.0" text="Pays">
-                          <items>
-                            <MenuItem mnemonicParsing="false" text="Action 1" />
-                            <MenuItem mnemonicParsing="false" text="Action 2" />
-                          </items>
-                        </MenuButton>
+                        <RangeSlider fx:id="titrageSlider" layoutX="74.0" layoutY="79.0" majorTickUnit="5.0" max="30.0" minorTickCount="1" prefHeight="14.0" prefWidth="246.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
                         <SearchableComboBox fx:id="contenanceSearchBox" layoutX="464.0" layoutY="39.0" prefHeight="25.0" prefWidth="122.0" promptText="Contenance" />
-                        <SearchableComboBox fx:id="typeSearchBox" layoutX="464.0" layoutY="74.0" onAction="#onSelectedType" prefHeight="25.0" prefWidth="122.0" promptText="Type Biere" />
+                        <SearchableComboBox fx:id="typeSearchBox" layoutX="464.0" layoutY="74.0" prefHeight="25.0" prefWidth="122.0" promptText="Type Biere" />
                         <SearchableComboBox fx:id="fabricantSearchBox" layoutX="63.0" layoutY="110.0" prefHeight="25.0" prefWidth="122.0" promptText="Fabricant" />
                         <SearchableComboBox fx:id="marqueSearchBox" layoutX="197.0" layoutY="110.0" prefHeight="25.0" prefWidth="122.0" promptText="Marque" />
-                        <SearchableComboBox fx:id="couleurSearchBox" layoutX="329.0" layoutY="74.0" onAction="#onSelectedColor" prefHeight="25.0" prefWidth="122.0" promptText="Couleur" />
+                        <SearchableComboBox fx:id="couleurSearchBox" layoutX="329.0" layoutY="74.0" prefHeight="25.0" prefWidth="122.0" promptText="Couleur" />
                         <SearchableComboBox fx:id="continentSearchBox" layoutX="329.0" layoutY="110.0" prefHeight="25.0" prefWidth="122.0" promptText="Continent" />
+                        <SearchableComboBox fx:id="paysSearchBox" layoutX="464.0" layoutY="110.0" prefHeight="25.0" prefWidth="122.0" promptText="Pays" />
                      </children>
                   </AnchorPane>
-                  <TableView fx:id="articlesTable" prefHeight="400.0" prefWidth="302.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
+                  <TableView fx:id="articlesTable" prefHeight="589.0" prefWidth="596.0" AnchorPane.bottomAnchor="34.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
                     <columns>
                       <TableColumn fx:id="idCol" prefWidth="60.0" text="ID" />
                       <TableColumn fx:id="nomArticleCol" prefWidth="405.0" text="Nom Article" />
@@ -87,6 +81,26 @@
                         <TableColumn fx:id="titrageCol" prefWidth="65.0" text="Titrage" />
                     </columns>
                   </TableView>
+                  <HBox prefHeight="33.0" prefWidth="596.0" styleClass="searchCountContainer" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <Label text="Results:" underline="true">
+                           <HBox.margin>
+                              <Insets left="10.0" top="7.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="resultCount">
+                           <HBox.margin>
+                              <Insets left="5.0" top="8.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">

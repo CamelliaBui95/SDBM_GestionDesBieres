@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class TypeDAO extends DAO<Type>{
+public class TypeDAO extends DAO<Type, Type>{
     @Override
     public ArrayList<Type> getAll() {
         ArrayList<Type> types = new ArrayList<>();
@@ -16,10 +16,16 @@ public class TypeDAO extends DAO<Type>{
             ResultSet rs = stm.executeQuery(sqlRequest);
             while(rs.next())
                 types.add(new Type(rs.getInt(1), rs.getString(2)));
+            rs.close();
         } catch(Exception e) {
             e.printStackTrace();
         }
 
         return types;
+    }
+
+    @Override
+    public ArrayList<Type> getLike(Type objet) {
+        return null;
     }
 }

@@ -1,9 +1,8 @@
 package fr.btn.sdbm;
 
-import fr.btn.sdbm.metier.Article;
-import fr.btn.sdbm.metier.Couleur;
-import fr.btn.sdbm.metier.Type;
+import fr.btn.sdbm.metier.*;
 import fr.btn.sdbm.service.ArticleBean;
+import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
@@ -12,7 +11,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import org.controlsfx.control.RangeSlider;
 import org.controlsfx.control.SearchableComboBox;
+
+import java.util.ArrayList;
 
 public class MainViewController {
     @FXML
@@ -48,15 +50,27 @@ public class MainViewController {
     @FXML
     private Label typeText;
     @FXML
+    private Label resultCount;
+    @FXML
     private TextField searchField;
     @FXML
     private SearchableComboBox couleurSearchBox;
     @FXML
     private SearchableComboBox typeSearchBox;
-    private SortedList<Article> articleSortedList;
+    @FXML
+    private SearchableComboBox paysSearchBox;
+    @FXML
+    private SearchableComboBox continentSearchBox;
+    @FXML
+    private SearchableComboBox fabricantSearchBox;
+    @FXML
+    private SearchableComboBox marqueSearchBox;
+    @FXML
+    private SearchableComboBox contenanceSearchBox;
+    @FXML
+    private RangeSlider titrageSlider;
 
-    private FilteredList<Couleur> couleurFilteredList;
-    private FilteredList<Type> typeFilteredList;
+    private SortedList<Article> articleSortedList;
 
     private ArticleBean bean;
     @FXML
@@ -68,10 +82,26 @@ public class MainViewController {
 
         articlesTable.getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> showArticleDetail(n));
         searchField.textProperty().addListener((ob, o, n) -> bean.setFilteredPredicateArticles(n));
+        couleurSearchBox.valueProperty().addListener((ob, o, n) -> bean.getArticlesByCouleur((Couleur) n));
+        typeSearchBox.valueProperty().addListener((ob, o, n) -> bean.getArticlesByType((Type) n));
+        marqueSearchBox.valueProperty().addListener((ob, o, n) -> bean.getArticlesByMarque((Marque) n));
+        fabricantSearchBox.valueProperty().addListener((ob, o, n) -> bean.getArticlesByFabricant((Fabricant) n));
+        paysSearchBox.valueProperty().addListener((ob, o, n) -> bean.getArticlesByPays((Pays) n));
+        continentSearchBox.valueProperty().addListener((ob, o, n) -> bean.getArticlesByContinent((Continent) n));
+        contenanceSearchBox.valueProperty().addListener((ob, o, n) -> bean.getArticlesByVolume((Volume) n));
+
+        titrageSlider.lowValueProperty().addListener((ob, o, n) -> {
+            if(!titrageSlider.isLowValueChanging())
+                bean.getArticlesByTitrage(n.floatValue(), 30, true, false);
+        });
+        titrageSlider.highValueProperty().addListener((ob, o, n) -> {
+            if(!titrageSlider.isHighValueChanging())
+                bean.getArticlesByTitrage(0, n.floatValue(), false, true);
+        });
 
     }
 
-    public void showArticleDetail(Article article) {
+    private void showArticleDetail(Article article) {
         if(article == null)
             return;
 
@@ -90,27 +120,23 @@ public class MainViewController {
 
     public void setArticleBean(ArticleBean articleBean) {
         this.bean = articleBean;
+        this.bean.setMainViewController(this);
         this.articleSortedList = this.bean.getSortedArticles();
         this.articleSortedList.comparatorProperty().bind(articlesTable.comparatorProperty());
         articlesTable.setItems(this.articleSortedList);
 
-       this.couleurFilteredList = this.bean.getFilteredCouleurs();
-       this.couleurSearchBox.setItems(this.couleurFilteredList);
-
-       this.typeFilteredList = this.bean.getFilteredTypes();
-       this.typeSearchBox.setItems(this.typeFilteredList);
+       this.couleurSearchBox.setItems(this.bean.getFilteredCouleurs());
+       this.typeSearchBox.setItems(this.bean.getFilteredTypes());
+       this.paysSearchBox.setItems(this.bean.getFilteredPays());
+       this.continentSearchBox.setItems(this.bean.getFilteredContinents());
+       this.fabricantSearchBox.setItems(this.bean.getFilteredFabricants());
+       this.marqueSearchBox.setItems(this.bean.getFilteredMarques());
+       this.contenanceSearchBox.setItems(this.bean.getFilteredVolumes());
 
     }
 
-    @FXML
-    private void onSelectedColor(ActionEvent event) {
-        //String selected = couleurSearchBox.getSelectionModel().getSelectedItem().toString();
-        System.out.println(couleurSearchBox.getValue());
-    }
-
-    @FXML
-    private void onSelectedType(ActionEvent event) {
-        System.out.println(typeSearchBox.getValue());
+    public void setResultCount(int count) {
+        this.resultCount.setText(Integer.toString(count));
     }
 
 }
