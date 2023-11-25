@@ -70,28 +70,28 @@ public class ArticleBean {
         marques = FXCollections.observableArrayList();
         volumes = FXCollections.observableArrayList();
 
-        types.add(new Type(0, "Type Biere"));
-        types.addAll(typeDAO.getAll());
-
-        couleurs.add(new Couleur(0, "Couleur"));
-        couleurs.addAll(couleurDAO.getAll());
-
-        fabricants.add(new Fabricant(0, "Fabricant"));
-        fabricants.addAll(fabricantsList);
-
         articles.addAll(articleDAO.getAll());
 
-        continents.add(new Continent(0, "Continent"));
+        types.addAll(typeDAO.getAll());
+        types.addFirst(new Type(0, "Type Biere (" + types.size() + ")"));
+
+        couleurs.addAll(couleurDAO.getAll());
+        couleurs.addFirst(new Couleur(0, "Couleur (" + couleurs.size() + ")"));
+
+        fabricants.addAll(fabricantsList);
+        fabricants.addFirst(new Fabricant(0, "Fabricant (" + fabricants.size() + ")"));
+
         continents.addAll(continentList);
+        continents.addFirst(new Continent(0, "Continent (" + continents.size() + ")"));
 
-        pays.add(new Pays(0, "Pays", null));
         pays.addAll(paysList);
+        pays.addFirst(new Pays(0, "Pays (" + pays.size() + ")", null));
 
-        marques.add(new Marque(0, "Marque", null, null));
         marques.addAll(marqueDAO.getAll());
+        marques.addFirst(new Marque(0, "Marque (" + marques.size() + ")", null, null));
 
-        volumes.add(new Volume(0, "Volume"));
         volumes.addAll(volumeDAO.getAll());
+        volumes.addFirst(new Volume(0, "Contenance (" + volumes.size() + ")"));
 
         filteredArticles = new FilteredList<>(articles, null);
         sortedArticles = new SortedList<>(filteredArticles);

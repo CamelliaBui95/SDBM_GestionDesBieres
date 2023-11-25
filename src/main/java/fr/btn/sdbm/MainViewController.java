@@ -7,10 +7,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.controlsfx.control.RangeSlider;
 import org.controlsfx.control.SearchableComboBox;
 
@@ -133,10 +130,22 @@ public class MainViewController {
        this.marqueSearchBox.setItems(this.bean.getFilteredMarques());
        this.contenanceSearchBox.setItems(this.bean.getFilteredVolumes());
 
+       setDefaultSelect();
+
     }
 
     public void setResultCount(int count) {
         this.resultCount.setText(Integer.toString(count));
+    }
+
+    private void setDefaultSelect() {
+        this.couleurSearchBox.getSelectionModel().selectFirst();
+        this.fabricantSearchBox.getSelectionModel().selectFirst();
+        this.contenanceSearchBox.getSelectionModel().selectFirst();
+        this.continentSearchBox.getSelectionModel().selectFirst();
+        this.paysSearchBox.getSelectionModel().selectFirst();
+        this.marqueSearchBox.getSelectionModel().selectFirst();
+        this.typeSearchBox.getSelectionModel().selectFirst();
     }
 
 }
