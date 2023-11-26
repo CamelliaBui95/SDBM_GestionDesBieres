@@ -28,4 +28,9 @@ public class ContinentDAO extends DAO<Continent, Continent>{
     public ArrayList<Continent> getLike(Continent objet) {
         return null;
     }
+
+    @Override
+    public boolean update(Continent objet) {
+        return false;
+    }
 }

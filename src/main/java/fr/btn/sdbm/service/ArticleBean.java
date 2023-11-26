@@ -214,7 +214,6 @@ public class ArticleBean {
             controller.setResultCount(articles.size());
         }
     }
-
     public void getArticlesByTitrage(float min, float max, boolean changeInMin, boolean changeInMax) {
         Titrage currentTitrage = articleSearch.getTitrage();
 
@@ -228,6 +227,15 @@ public class ArticleBean {
         articleSearch.setTitrage(currentTitrage);
         articles.setAll(articleDAO.getLike(articleSearch));
         controller.setResultCount(articles.size());
+    }
+
+    public boolean updateArticle(Article selectedArticle, Article originalVer) {
+        boolean isUpdated = articleDAO.update(selectedArticle);
+        if(!isUpdated) {
+            int index = articles.indexOf(selectedArticle);
+            articles.set(index, originalVer);
+        }
+        return isUpdated;
     }
 
     public void setMainViewController(MainViewController controller) {

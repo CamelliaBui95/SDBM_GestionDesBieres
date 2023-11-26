@@ -36,6 +36,11 @@ public class PaysDAO extends DAO<Pays, Pays>{
         return null;
     }
 
+    @Override
+    public boolean update(Pays objet) {
+        return false;
+    }
+
     private Continent getContinentForPays(int idContinent) {
         if(continents == null)
             return null;

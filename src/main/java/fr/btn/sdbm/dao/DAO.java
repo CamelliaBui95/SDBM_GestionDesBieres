@@ -12,4 +12,5 @@ public abstract class DAO<T, TSearch> {
     }
     public abstract ArrayList<T> getAll();
     public abstract ArrayList <T> getLike(TSearch objet);
+    public abstract boolean update(T objet);
 }

@@ -282,9 +282,9 @@
                      <children>
                         <ButtonBar prefHeight="182.0" prefWidth="236.0">
                           <buttons>
-                            <Button fx:id="modifierBtn" alignment="TOP_CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Modifier" />
-                              <Button fx:id="ajouterBtn" alignment="TOP_CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Ajouter" />
-                              <Button fx:id="supprimerBtn" alignment="TOP_CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Supprimer" />
+                            <Button fx:id="modifierBtn" alignment="TOP_CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleModifyClicked" text="Modifier" />
+                              <Button fx:id="ajouterBtn" alignment="TOP_CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleNewClicked" text="Ajouter" />
+                              <Button fx:id="supprimerBtn" alignment="TOP_CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleDeleteClicked" text="Supprimer" />
                           </buttons>
                         </ButtonBar>
                      </children>

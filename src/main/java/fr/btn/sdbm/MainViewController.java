@@ -70,6 +70,8 @@ public class MainViewController {
     private SortedList<Article> articleSortedList;
 
     private ArticleBean bean;
+
+    private MainApp mainApp;
     @FXML
     private void initialize() {
         this.idCol.setCellValueFactory(cell -> cell.getValue().idProperty().asString());
@@ -78,6 +80,7 @@ public class MainViewController {
         this.titrageCol.setCellValueFactory(cell -> cell.getValue().titrageProperty().asString());
 
         articlesTable.getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> showArticleDetail(n));
+
         searchField.textProperty().addListener((ob, o, n) -> bean.setFilteredPredicateArticles(n));
         couleurSearchBox.valueProperty().addListener((ob, o, n) -> bean.getArticlesByCouleur((Couleur) n));
         typeSearchBox.valueProperty().addListener((ob, o, n) -> bean.getArticlesByType((Type) n));
@@ -97,7 +100,6 @@ public class MainViewController {
         });
 
     }
-
     private void showArticleDetail(Article article) {
         if(article == null)
             return;
@@ -113,6 +115,31 @@ public class MainViewController {
         continentText.setText(article.getContinent());
         couleurText.setText(article.getCouleur());
         typeText.setText(article.getType());
+    }
+
+    @FXML
+    private void handleModifyClicked() {
+
+        Article selectedArticle = articlesTable.getSelectionModel().getSelectedItem();
+        if(selectedArticle == null) return;
+        Article originalVer = createACopyOfArticle(selectedArticle);
+
+        boolean isOkClicked = mainApp.showArticleNewEditDialog("Modifier Article N°" + selectedArticle.getId(), selectedArticle);
+        if(isOkClicked) {
+            boolean isUpdated = bean.updateArticle(selectedArticle, originalVer);
+            if(isUpdated)
+                showArticleDetail(selectedArticle);
+            else showArticleDetail(originalVer);
+        }
+    }
+    @FXML
+    private void handleNewClicked() {
+
+    }
+
+    @FXML
+    private void handleDeleteClicked() {
+
     }
 
     public void setArticleBean(ArticleBean articleBean) {
@@ -148,4 +175,23 @@ public class MainViewController {
         this.typeSearchBox.getSelectionModel().selectFirst();
     }
 
+    public void setMainApp(MainApp mainApp) {
+        this.mainApp = mainApp;
+    }
+
+    private Article createACopyOfArticle(Article original) {
+        Article newArticle = new Article(original.getId(), original.getNomArticle(),
+                original.getVolume(), original.getTitrage(), original.getPrixAchat(),
+                original.getStock(), original.getCouleur(), original.getType(), original.getMarque(),
+                original.getFabricant(), original.getPays(), original.getContinent());
+
+        newArticle.setIdCouleur(original.getIdCouleur());
+        newArticle.setIdType(original.getIdType());
+        newArticle.setIdMarque(original.getIdMarque());
+        newArticle.setIdFabricant(original.getIdFabricant());
+        newArticle.setIdPays(original.getIdPays());
+        newArticle.setIdContinent(original.getIdContinent());
+
+        return newArticle;
+    }
 }

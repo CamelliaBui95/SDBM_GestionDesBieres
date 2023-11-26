@@ -27,4 +27,9 @@ public class CouleurDAO extends DAO<Couleur, Couleur>{
     public ArrayList<Couleur> getLike(Couleur objet) {
         return null;
     }
+
+    @Override
+    public boolean update(Couleur objet) {
+        return false;
+    }
 }

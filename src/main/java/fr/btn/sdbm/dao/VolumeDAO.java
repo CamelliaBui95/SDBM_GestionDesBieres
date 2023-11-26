@@ -27,4 +27,9 @@ public class VolumeDAO extends DAO<Volume, Volume>{
     public ArrayList<Volume> getLike(Volume objet) {
         return null;
     }
+
+    @Override
+    public boolean update(Volume objet) {
+        return false;
+    }
 }

@@ -13,11 +13,17 @@ public class Article {
     private SimpleFloatProperty prixAchat;
     private SimpleIntegerProperty stock;
     private SimpleStringProperty couleur;
+    private SimpleIntegerProperty idCouleur;
     private SimpleStringProperty type;
+    private SimpleIntegerProperty idType;
     private SimpleStringProperty marque;
+    private SimpleIntegerProperty idMarque;
     private SimpleStringProperty fabricant;
+    private SimpleIntegerProperty idFabricant;
     private SimpleStringProperty pays;
+    private SimpleIntegerProperty idPays;
     private SimpleStringProperty continent;
+    private SimpleIntegerProperty idContinent;
 
     public Article(int id, String nomArticle, int volume, float titrage, float prixAchat, int stock, String couleur, String type, String marque, String fabricant, String pays, String continent) {
         this.id = new SimpleIntegerProperty(id);
@@ -32,6 +38,13 @@ public class Article {
         this.fabricant = new SimpleStringProperty(fabricant);
         this.pays = new SimpleStringProperty(pays);
         this.continent = new SimpleStringProperty(continent);
+
+        this.idCouleur = new SimpleIntegerProperty(0);
+        this.idMarque = new SimpleIntegerProperty(0);
+        this.idFabricant = new SimpleIntegerProperty(0);
+        this.idType = new SimpleIntegerProperty(0);
+        this.idPays = new SimpleIntegerProperty(0);
+        this.idContinent = new SimpleIntegerProperty(0);
     }
 
     public int getId() {
@@ -178,6 +191,78 @@ public class Article {
         this.continent.set(continent);
     }
 
+    public int getIdCouleur() {
+        return idCouleur.get();
+    }
+
+    public SimpleIntegerProperty idCouleurProperty() {
+        return idCouleur;
+    }
+
+    public void setIdCouleur(int idCouleur) {
+        this.idCouleur.set(idCouleur);
+    }
+
+    public int getIdType() {
+        return idType.get();
+    }
+
+    public SimpleIntegerProperty idTypeProperty() {
+        return idType;
+    }
+
+    public void setIdType(int idType) {
+        this.idType.set(idType);
+    }
+
+    public int getIdMarque() {
+        return idMarque.get();
+    }
+
+    public SimpleIntegerProperty idMarqueProperty() {
+        return idMarque;
+    }
+
+    public void setIdMarque(int idMarque) {
+        this.idMarque.set(idMarque);
+    }
+
+    public int getIdFabricant() {
+        return idFabricant.get();
+    }
+
+    public SimpleIntegerProperty idFabricantProperty() {
+        return idFabricant;
+    }
+
+    public void setIdFabricant(int idFabricant) {
+        this.idFabricant.set(idFabricant);
+    }
+
+    public int getIdPays() {
+        return idPays.get();
+    }
+
+    public SimpleIntegerProperty idPaysProperty() {
+        return idPays;
+    }
+
+    public void setIdPays(int idPays) {
+        this.idPays.set(idPays);
+    }
+
+    public int getIdContinent() {
+        return idContinent.get();
+    }
+
+    public SimpleIntegerProperty idContinentProperty() {
+        return idContinent;
+    }
+
+    public void setIdContinent(int idContinent) {
+        this.idContinent.set(idContinent);
+    }
+
     @Override
     public String toString() {
         return "Article{" +
@@ -185,6 +270,8 @@ public class Article {
                 ", nomArticle=" + nomArticle +
                 ", volume=" + volume +
                 ", titrage=" + titrage +
+                ", id_Couleur=" + idCouleur +
+                ", id_Type=" + idType +
                 '}';
     }
 }

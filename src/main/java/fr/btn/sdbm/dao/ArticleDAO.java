@@ -3,10 +3,7 @@ package fr.btn.sdbm.dao;
 import fr.btn.sdbm.metier.Article;
 import fr.btn.sdbm.service.ArticleSearch;
 
-import java.sql.CallableStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class ArticleDAO extends DAO<Article, ArticleSearch> {
@@ -19,7 +16,18 @@ public class ArticleDAO extends DAO<Article, ArticleSearch> {
             CallableStatement cStmt = this.connection.prepareCall(ps);
             ResultSet rs = cStmt.executeQuery();
             while(rs.next()) {
-                articles.add(new Article(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getFloat(5), rs.getFloat(4), rs.getInt(6), rs.getString(7), rs.getString(14), rs.getString(13), rs.getString(16), rs.getString(12), rs.getString(18)));
+                Article article = new Article(rs.getInt(1), rs.getString(2), rs.getInt(3),
+                        rs.getFloat(5), rs.getFloat(4), rs.getInt(6),
+                        rs.getString(7), rs.getString(14), rs.getString(13),
+                        rs.getString(16), rs.getString(12), rs.getString(18));
+                article.setIdCouleur(rs.getInt("ID_COULEUR"));
+                article.setIdType(rs.getInt("ID_TYPE"));
+                article.setIdMarque(rs.getInt("ID_MARQUE"));
+                article.setIdFabricant(rs.getInt("ID_FABRICANT"));
+                article.setIdPays(rs.getInt("ID_PAYS"));
+                article.setIdContinent(rs.getInt("ID_CONTINENT"));
+
+                articles.add(article);
             }
             rs.close();
         } catch(Exception e) {
@@ -60,16 +68,48 @@ public class ArticleDAO extends DAO<Article, ArticleSearch> {
            stmt.executeQuery();
            stmt.getMoreResults();
            ResultSet rs = stmt.getResultSet();
-           while(rs.next())
-               articles.add(new Article(rs.getInt(1), rs.getString(2), rs.getInt("Volume"),
+           while(rs.next()) {
+               Article article = new Article(rs.getInt(1), rs.getString(2), rs.getInt("Volume"),
                        rs.getFloat("Titrage"), rs.getFloat("Prix_Achat"), rs.getInt("Stock"), rs.getString("Couleur"),
                        rs.getString("Type"), rs.getString("Marque"), rs.getString("Fabricant"), rs.getString("Pays"),
-                       rs.getString("Continent")));
+                       rs.getString("Continent"));
+               article.setIdCouleur(rs.getInt("ID_COULEUR"));
+               article.setIdType(rs.getInt("ID_TYPE"));
+               article.setIdMarque(rs.getInt("ID_MARQUE"));
+               article.setIdFabricant(rs.getInt("ID_FABRICANT"));
+               article.setIdPays(rs.getInt("ID_PAYS"));
+               article.setIdContinent(rs.getInt("ID_CONTINENT"));
+               articles.add(article);
+           }
+
            rs.close();
         } catch(Exception e) {
             e.printStackTrace();
         }
 
         return articles;
+    }
+
+    @Override
+    public boolean update(Article article) {
+        String rq = "{call ps_modifierArticle(?,?,?,?,?,?,?,?,?)}";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(rq, Statement.RETURN_GENERATED_KEYS);
+            stmt.setInt(1, article.getId());
+            stmt.setString(2, article.getNomArticle());
+            stmt.setFloat(3, article.getPrixAchat());
+            stmt.setInt(4, article.getVolume());
+            stmt.setFloat(5, article.getTitrage());
+            stmt.setInt(6, article.getIdMarque());
+            stmt.setInt(7, article.getIdCouleur());
+            stmt.setInt(8, article.getIdType());
+            stmt.setInt(9, article.getStock());
+            stmt.executeUpdate();
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 }

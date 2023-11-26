@@ -29,4 +29,9 @@ public class FabricantDAO extends DAO<Fabricant, Fabricant>{
     public ArrayList<Fabricant> getLike(Fabricant objet) {
         return null;
     }
+
+    @Override
+    public boolean update(Fabricant objet) {
+        return false;
+    }
 }

@@ -28,4 +28,9 @@ public class TypeDAO extends DAO<Type, Type>{
     public ArrayList<Type> getLike(Type objet) {
         return null;
     }
+
+    @Override
+    public boolean update(Type objet) {
+        return false;
+    }
 }

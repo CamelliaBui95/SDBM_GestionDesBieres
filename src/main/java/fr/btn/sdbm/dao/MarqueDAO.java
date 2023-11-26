@@ -38,6 +38,11 @@ public class MarqueDAO extends DAO<Marque, Marque>{
         return null;
     }
 
+    @Override
+    public boolean update(Marque objet) {
+        return false;
+    }
+
     private Pays getPaysForMarque(int idPays) {
         if(pays == null || idPays == 0)
             return null;
