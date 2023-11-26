@@ -130,7 +130,8 @@ public class ArticleNewEditDialogController {
 
         this.article = article;
 
-        idArticle.setText(Integer.toString(article.getId()));
+        String id = article.getId() == 0 ? "###" : Integer.toString(article.getId());
+        idArticle.setText(id);
         libelleField.setText(article.getNomArticle());
         volumeField.setText(Integer.toString(article.getVolume()));
         titrageField.setText(Float.toString(article.getTitrage()));

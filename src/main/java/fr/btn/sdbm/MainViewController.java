@@ -134,7 +134,14 @@ public class MainViewController {
     }
     @FXML
     private void handleNewClicked() {
+        Article newArticle = new Article();
+        boolean isOkClicked = mainApp.showArticleNewEditDialog("New Article", newArticle);
 
+        if(isOkClicked) {
+            boolean isPosted = bean.postArticle(newArticle);
+            if(isPosted)
+                showArticleDetail(newArticle);
+        }
     }
 
     @FXML

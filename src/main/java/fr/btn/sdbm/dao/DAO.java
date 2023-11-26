@@ -11,6 +11,8 @@ public abstract class DAO<T, TSearch> {
         connection = SBDMConnect.getInstance();
     }
     public abstract ArrayList<T> getAll();
-    public abstract ArrayList <T> getLike(TSearch objet);
-    public abstract boolean update(T objet);
+    public abstract ArrayList <T> getLike(TSearch object);
+    public abstract boolean update(T object);
+
+    public abstract boolean post(T object);
 }

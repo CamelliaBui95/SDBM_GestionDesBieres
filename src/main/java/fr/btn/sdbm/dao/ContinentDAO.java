@@ -33,4 +33,9 @@ public class ContinentDAO extends DAO<Continent, Continent>{
     public boolean update(Continent objet) {
         return false;
     }
+
+    @Override
+    public boolean post(Continent object) {
+        return false;
+    }
 }

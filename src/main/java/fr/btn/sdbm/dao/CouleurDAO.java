@@ -32,4 +32,9 @@ public class CouleurDAO extends DAO<Couleur, Couleur>{
     public boolean update(Couleur objet) {
         return false;
     }
+
+    @Override
+    public boolean post(Couleur object) {
+        return false;
+    }
 }

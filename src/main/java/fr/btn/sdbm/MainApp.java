@@ -71,6 +71,7 @@ public class MainApp extends Application {
             controller.setTypes(bean.getFilteredTypes());
             controller.setMarques(bean.getFilteredMarques());
 
+            dialogStage.setResizable(false);
             dialogStage.showAndWait();
 
             return controller.isOkClicked();

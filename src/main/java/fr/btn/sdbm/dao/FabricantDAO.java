@@ -34,4 +34,9 @@ public class FabricantDAO extends DAO<Fabricant, Fabricant>{
     public boolean update(Fabricant objet) {
         return false;
     }
+
+    @Override
+    public boolean post(Fabricant object) {
+        return false;
+    }
 }

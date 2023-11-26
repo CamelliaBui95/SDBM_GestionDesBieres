@@ -47,6 +47,28 @@ public class Article {
         this.idContinent = new SimpleIntegerProperty(0);
     }
 
+    public Article() {
+        this.id = new SimpleIntegerProperty(0);
+        this.nomArticle = new SimpleStringProperty("");
+        this.volume = new SimpleIntegerProperty(0);
+        this.titrage = new SimpleFloatProperty(0);
+        this.prixAchat = new SimpleFloatProperty(0);
+        this.stock = new SimpleIntegerProperty(0);
+        this.couleur = new SimpleStringProperty("");
+        this.type = new SimpleStringProperty("");
+        this.marque = new SimpleStringProperty("");
+        this.fabricant = new SimpleStringProperty("");
+        this.pays = new SimpleStringProperty("");
+        this.continent = new SimpleStringProperty("");
+
+        this.idCouleur = new SimpleIntegerProperty(0);
+        this.idMarque = new SimpleIntegerProperty(0);
+        this.idFabricant = new SimpleIntegerProperty(0);
+        this.idType = new SimpleIntegerProperty(0);
+        this.idPays = new SimpleIntegerProperty(0);
+        this.idContinent = new SimpleIntegerProperty(0);
+    }
+
     public int getId() {
         return id.get();
     }

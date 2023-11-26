@@ -32,4 +32,9 @@ public class VolumeDAO extends DAO<Volume, Volume>{
     public boolean update(Volume objet) {
         return false;
     }
+
+    @Override
+    public boolean post(Volume object) {
+        return false;
+    }
 }

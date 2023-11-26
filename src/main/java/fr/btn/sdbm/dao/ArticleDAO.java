@@ -112,4 +112,25 @@ public class ArticleDAO extends DAO<Article, ArticleSearch> {
         }
 
     }
+
+    @Override
+    public boolean post(Article article) {
+        String ps = "{call ps_insertArticle(?,?,?,?,?,?,?,?)}";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(ps);
+            stmt.setString(1, article.getNomArticle());
+            stmt.setFloat(2, article.getPrixAchat());
+            stmt.setInt(3, article.getVolume());
+            stmt.setFloat(4, article.getTitrage());
+            stmt.setInt(5, article.getIdMarque() + 1);
+            stmt.setInt(6, article.getIdCouleur());
+            stmt.setInt(7, article.getIdType());
+            stmt.setInt(8, article.getStock());
+            stmt.execute();
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

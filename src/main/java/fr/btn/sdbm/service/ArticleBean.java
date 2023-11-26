@@ -238,6 +238,13 @@ public class ArticleBean {
         return isUpdated;
     }
 
+    public boolean postArticle(Article article) {
+        boolean isPosted = articleDAO.post(article);
+        if(isPosted)
+            articles.setAll(articleDAO.getAll());
+        return isPosted;
+    }
+
     public void setMainViewController(MainViewController controller) {
         this.controller = controller;
         controller.setResultCount(articles.size());

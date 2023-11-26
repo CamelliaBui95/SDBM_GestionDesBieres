@@ -33,4 +33,9 @@ public class TypeDAO extends DAO<Type, Type>{
     public boolean update(Type objet) {
         return false;
     }
+
+    @Override
+    public boolean post(Type object) {
+        return false;
+    }
 }
