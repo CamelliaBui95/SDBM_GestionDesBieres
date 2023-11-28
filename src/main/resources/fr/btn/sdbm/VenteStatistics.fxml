@@ -4,6 +4,7 @@
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -13,16 +14,16 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.btn.sdbm.VenteStatisticsController">
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.btn.sdbm.VenteStatisticsController">
    <children>
       <SplitPane dividerPositions="0.5" layoutX="407.0" layoutY="157.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="499.0" prefWidth="1188.0">
                <children>
-                  <LineChart fx:id="venteLineChart" layoutX="215.0" layoutY="60.0" prefHeight="363.0" prefWidth="758.0" title="Ventes Par Mois">
+                  <LineChart fx:id="venteLineChart" layoutX="215.0" layoutY="60.0" prefHeight="363.0" prefWidth="758.0" title="SDBM - Ventes Stats">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>
@@ -30,6 +31,32 @@
                       <NumberAxis side="LEFT" />
                     </yAxis>
                   </LineChart>
+                  <VBox layoutX="14.0" layoutY="104.0" prefHeight="472.0" prefWidth="117.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="5.0">
+                     <children>
+                        <CheckBox fx:id="box2014" mnemonicParsing="false" onAction="#handleBoxChecked" text="2014 - 2018">
+                           <VBox.margin>
+                              <Insets top="200.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </CheckBox>
+                        <CheckBox fx:id="box2019" mnemonicParsing="false" onAction="#handleBoxChecked" text="2019 - 2022">
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </CheckBox>
+                     </children>
+                  </VBox>
                </children>
             </AnchorPane>
           <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="1188.0">
@@ -38,12 +65,13 @@
                      <items>
                         <AnchorPane maxWidth="-Infinity" prefHeight="298.0" prefWidth="906.0">
                            <children>
-                              <TableView prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <TableView fx:id="venteDesArticlesView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <columns>
-                                  <TableColumn prefWidth="75.0" text="Référence" />
-                                  <TableColumn prefWidth="300.0" text="Désignation" />
-                                    <TableColumn prefWidth="100.0" text="Quantité" />
-                                    <TableColumn prefWidth="100.0" text="Totale" />
+                                    <TableColumn fx:id="anneeCol" prefWidth="75.0" text="Année" />
+                                  <TableColumn fx:id="idCol" prefWidth="75.0" text="Référence" />
+                                  <TableColumn fx:id="nomArticleCol" prefWidth="300.0" text="Désignation" />
+                                    <TableColumn fx:id="qteCol" prefWidth="100.0" text="Quantité" />
+                                    <TableColumn fx:id="totaleCol" prefWidth="100.0" text="Totale" />
                                 </columns>
                               </TableView>
                            </children>
@@ -56,26 +84,37 @@
                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="316.0" minWidth="10.0" prefWidth="238.0" />
                                 </columnConstraints>
                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <Label prefHeight="27.0" prefWidth="143.0" text="Quantité Totale :" GridPane.halignment="LEFT">
+                                    <Label prefHeight="27.0" prefWidth="143.0" text="Periode:">
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <Label text="Chiffre D'Affaire :" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+                                    <Label prefHeight="27.0" prefWidth="143.0" text="Quantité Totale :" GridPane.halignment="LEFT" GridPane.rowIndex="1">
                                        <font>
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="qteTotaleText" GridPane.columnIndex="1">
+                                    <Label text="Chiffre D'Affaire :" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font name="System Bold" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="periodeText" GridPane.columnIndex="1">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="caText" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <Label fx:id="qteTotaleText" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="caText" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -94,6 +133,11 @@
                                     </Label>
                                  </children>
                               </HBox>
+                              <Label fx:id="qteTotaleText1" layoutX="10.0" layoutY="10.0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </AnchorPane>
                      </items>

@@ -90,7 +90,7 @@ public class ArticleNewEditDialogController {
         boolean isLibelleValid = libelleField.getText() != null && !libelleField.getText().isEmpty();
         boolean isVolumeValid = volumeField.getText() != null && isValidInteger(volumeField.getText());
         boolean isTitrageValid = titrageField.getText() != null && isValidFloat(titrageField.getText());
-        boolean isPrixValid = prixField.getText() != null && isValidFloat(prixField.getText());
+        boolean isPrixValid = prixField.getText() != null && isValidFloat(prixField.getText()) && Float.parseFloat(prixField.getText()) > 0;
         boolean isStockValid = stockField.getText() != null && isValidInteger(stockField.getText());
         boolean isMarqueValid = marqueSearchBox.getSelectionModel().getSelectedIndex() > 0;
 
@@ -152,5 +152,6 @@ public class ArticleNewEditDialogController {
     }
 
 
-
+//mvc
+//mcd
 }

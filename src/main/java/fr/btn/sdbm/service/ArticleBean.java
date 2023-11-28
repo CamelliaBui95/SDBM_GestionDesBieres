@@ -72,25 +72,25 @@ public class ArticleBean {
         articles.addAll(articleDAO.getAll());
 
         types.addAll(typeDAO.getAll());
-        types.addFirst(new Type(0, "Type Biere (" + types.size() + ")"));
+        types.add(0,new Type(0, "Type Biere (" + types.size() + ")"));
 
         couleurs.addAll(couleurDAO.getAll());
-        couleurs.addFirst(new Couleur(0, "Couleur (" + couleurs.size() + ")"));
+        couleurs.add(0,new Couleur(0, "Couleur (" + couleurs.size() + ")"));
 
         fabricants.addAll(fabricantsList);
-        fabricants.addFirst(new Fabricant(0, "Fabricant (" + fabricants.size() + ")"));
+        fabricants.add(0,new Fabricant(0, "Fabricant (" + fabricants.size() + ")"));
 
         continents.addAll(continentList);
-        continents.addFirst(new Continent(0, "Continent (" + continents.size() + ")"));
+        continents.add(0,new Continent(0, "Continent (" + continents.size() + ")"));
 
         pays.addAll(paysList);
-        pays.addFirst(new Pays(0, "Pays (" + pays.size() + ")", null));
+        pays.add(0,new Pays(0, "Pays (" + pays.size() + ")", null));
 
         marques.addAll(marqueDAO.getAll());
-        marques.addFirst(new Marque(0, "Marque (" + marques.size() + ")", null, null));
+        marques.add(0,new Marque(0, "Marque (" + marques.size() + ")", null, null));
 
         volumes.addAll(volumeDAO.getAll());
-        volumes.addFirst(new Volume(0, "Contenance (" + volumes.size() + ")"));
+        volumes.add(0,new Volume(0, "Contenance (" + volumes.size() + ")"));
 
         filteredArticles = new FilteredList<>(articles, null);
         sortedArticles = new SortedList<>(filteredArticles);
@@ -241,7 +241,7 @@ public class ArticleBean {
         Article insertedArticle = new Article();
         if(isPosted) {
             articles.setAll(articleDAO.getAll());
-            insertedArticle = articles.getLast();
+            insertedArticle = articles.get(articles.size() - 1);
         }
 
         return insertedArticle;
@@ -252,7 +252,7 @@ public class ArticleBean {
         Article first = null;
         if(isDeleted) {
             articles.setAll(articleDAO.getAll());
-            first = articles.getFirst();
+            first = articles.get(0);
         }
         return first;
     }
