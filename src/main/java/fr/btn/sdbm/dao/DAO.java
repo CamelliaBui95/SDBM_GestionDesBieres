@@ -13,6 +13,6 @@ public abstract class DAO<T, TSearch> {
     public abstract ArrayList<T> getAll();
     public abstract ArrayList <T> getLike(TSearch object);
     public abstract boolean update(T object);
-
     public abstract boolean post(T object);
+    public abstract boolean delete(T object);
 }

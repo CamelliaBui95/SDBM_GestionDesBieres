@@ -48,6 +48,11 @@ public class MarqueDAO extends DAO<Marque, Marque>{
         return false;
     }
 
+    @Override
+    public boolean delete(Marque object) {
+        return false;
+    }
+
     private Pays getPaysForMarque(int idPays) {
         if(pays == null || idPays == 0)
             return null;

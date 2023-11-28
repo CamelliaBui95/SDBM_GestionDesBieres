@@ -25,6 +25,8 @@ public class MainViewController {
     @FXML
     private TableColumn<Article, String> titrageCol;
     @FXML
+    private TableColumn<Article, String> stockCol;
+    @FXML
     private Label idText;
     @FXML
     private Label libelleText;
@@ -46,6 +48,8 @@ public class MainViewController {
     private Label couleurText;
     @FXML
     private Label typeText;
+    @FXML
+    private Label stockText;
     @FXML
     private Label resultCount;
     @FXML
@@ -78,6 +82,7 @@ public class MainViewController {
         this.nomArticleCol.setCellValueFactory(cell -> cell.getValue().nomArticleProperty());
         this.volumeCol.setCellValueFactory(cell -> cell.getValue().volumeProperty().asString());
         this.titrageCol.setCellValueFactory(cell -> cell.getValue().titrageProperty().asString());
+        this.stockCol.setCellValueFactory(cell -> cell.getValue().stockProperty().asString());
 
         articlesTable.getSelectionModel().selectedItemProperty().addListener((ob, o, n) -> showArticleDetail(n));
 
@@ -115,6 +120,7 @@ public class MainViewController {
         continentText.setText(article.getContinent());
         couleurText.setText(article.getCouleur());
         typeText.setText(article.getType());
+        stockText.setText(Integer.toString(article.getStock()));
     }
 
     @FXML
@@ -138,15 +144,27 @@ public class MainViewController {
         boolean isOkClicked = mainApp.showArticleNewEditDialog("New Article", newArticle);
 
         if(isOkClicked) {
-            boolean isPosted = bean.postArticle(newArticle);
-            if(isPosted)
-                showArticleDetail(newArticle);
+            Article insertedArticle = bean.postArticle(newArticle);
+            if(insertedArticle != null) {
+                showArticleDetail(insertedArticle);
+                articlesTable.getSelectionModel().select(insertedArticle);
+            }
         }
     }
 
     @FXML
     private void handleDeleteClicked() {
+        Article article = articlesTable.getSelectionModel().getSelectedItem();
+        Article first = bean.deleteArticle(article);
+        if(first != null) {
+            showArticleDetail(first);
+            articlesTable.getSelectionModel().select(first);
+        }
+    }
 
+    @FXML
+    private void handleStatisticsClicked() {
+        mainApp.showVenteStatistics();
     }
 
     public void setArticleBean(ArticleBean articleBean) {

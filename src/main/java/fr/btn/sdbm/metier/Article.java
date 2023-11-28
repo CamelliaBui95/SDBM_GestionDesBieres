@@ -294,6 +294,7 @@ public class Article {
                 ", titrage=" + titrage +
                 ", id_Couleur=" + idCouleur +
                 ", id_Type=" + idType +
+                ", Stock=" + stock +
                 '}';
     }
 }

@@ -26,7 +26,6 @@ public class ArticleBean {
     private FilteredList<Fabricant> filteredFabricants;
     private ObservableList<Marque> marques;
     private FilteredList<Marque> filteredMarques;
-
     private ObservableList<Volume> volumes;
     private FilteredList<Volume> filteredVolumes;
 
@@ -237,12 +236,25 @@ public class ArticleBean {
         }
         return isUpdated;
     }
-
-    public boolean postArticle(Article article) {
+    public Article postArticle(Article article) {
         boolean isPosted = articleDAO.post(article);
-        if(isPosted)
+        Article insertedArticle = new Article();
+        if(isPosted) {
             articles.setAll(articleDAO.getAll());
-        return isPosted;
+            insertedArticle = articles.getLast();
+        }
+
+        return insertedArticle;
+    }
+
+    public Article deleteArticle(Article article) {
+        boolean isDeleted = articleDAO.delete(article);
+        Article first = null;
+        if(isDeleted) {
+            articles.setAll(articleDAO.getAll());
+            first = articles.getFirst();
+        }
+        return first;
     }
 
     public void setMainViewController(MainViewController controller) {

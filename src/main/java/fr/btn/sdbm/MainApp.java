@@ -1,15 +1,12 @@
 package fr.btn.sdbm;
 
-import fr.btn.sdbm.dao.ArticleDAO;
 import fr.btn.sdbm.metier.Article;
 import fr.btn.sdbm.service.ArticleBean;
+import fr.btn.sdbm.service.VendreBean;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -17,11 +14,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MainApp extends Application {
-    private ArticleBean bean;
+    private ArticleBean articleBean;
+    private VendreBean vendreBean;
     private Stage primaryStage;
 
     public MainApp() {
-        bean = new ArticleBean();
+        articleBean = new ArticleBean();
+        vendreBean = new VendreBean();
     }
     @Override
     public void start(Stage stage) throws Exception {
@@ -36,7 +35,7 @@ public class MainApp extends Application {
             FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("MainView.fxml"));
             BorderPane pane = loader.load();
             MainViewController controller = loader.getController();
-            controller.setArticleBean(bean);
+            controller.setArticleBean(articleBean);
             controller.setMainApp(this);
 
             Scene scene = new Scene(pane, 1200, 800);
@@ -67,9 +66,9 @@ public class MainApp extends Application {
             controller.setDialogStage(dialogStage);
             controller.setArticle(article);
 
-            controller.setCouleurs(bean.getFilteredCouleurs());
-            controller.setTypes(bean.getFilteredTypes());
-            controller.setMarques(bean.getFilteredMarques());
+            controller.setCouleurs(articleBean.getFilteredCouleurs());
+            controller.setTypes(articleBean.getFilteredTypes());
+            controller.setMarques(articleBean.getFilteredMarques());
 
             dialogStage.setResizable(false);
             dialogStage.showAndWait();
@@ -78,6 +77,30 @@ public class MainApp extends Application {
         } catch(IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public void showVenteStatistics() {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("VenteStatistics.fxml"));
+            AnchorPane pane = loader.load();
+            VenteStatisticsController controller = loader.getController();
+            controller.setVendreBean(vendreBean);
+
+            Stage statisticStage = new Stage();
+
+            statisticStage.initModality(Modality.WINDOW_MODAL);
+            statisticStage.initOwner(primaryStage);
+            statisticStage.setResizable(false);
+            statisticStage.setTitle("Ventes 2014 - 2022");
+
+            Scene scene = new Scene(pane);
+            statisticStage.setScene(scene);
+
+            statisticStage.show();
+
+        } catch(IOException e) {
+            e.printStackTrace();
         }
     }
 }
