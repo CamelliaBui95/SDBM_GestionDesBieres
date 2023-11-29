@@ -1,9 +1,11 @@
 package fr.btn.sdbm.dao;
 
+import fr.btn.sdbm.metier.Continent;
 import fr.btn.sdbm.metier.Fabricant;
 import fr.btn.sdbm.metier.Marque;
 import fr.btn.sdbm.metier.Pays;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -34,8 +36,27 @@ public class MarqueDAO extends DAO<Marque, Marque>{
     }
 
     @Override
-    public ArrayList<Marque> getLike(Marque objet) {
-        return null;
+    public ArrayList<Marque> getLike(Marque marque) {
+        ArrayList<Marque> marqueList = new ArrayList<>();
+        String request = "{call ps_searchMarques(?)}";
+        try {
+            PreparedStatement stmt = connection.prepareCall(request);
+            stmt.setInt(1, marque.getFabricant().getId());
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                int idMarque = rs.getInt(1);
+                String nomMarque = rs.getString(2);
+                int idPays = rs.getInt(3);
+                int idFabricant = rs.getInt(4);
+                Fabricant fabricant = getFabricantForMarque(idFabricant);
+                Pays pays = getPaysForMarque(idPays);
+                marqueList.add(new Marque(idMarque, nomMarque, pays, fabricant));
+            }
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return marqueList;
     }
 
     @Override

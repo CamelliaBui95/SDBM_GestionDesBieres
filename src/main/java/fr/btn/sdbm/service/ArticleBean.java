@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class ArticleBean {
@@ -38,8 +39,9 @@ public class ArticleBean {
     private MarqueDAO marqueDAO;
     private FabricantDAO fabricantDAO;
     private VolumeDAO volumeDAO;
-
     private ArticleSearch articleSearch;
+    private Pays paysSearch;
+    private Marque marqueSearch;
 
     private MainViewController controller;
     public ArticleBean() {
@@ -145,6 +147,33 @@ public class ArticleBean {
         controller.setResultCount(filteredArticles.size());
     }
 
+    public void populatePays(Continent continent) {
+        if(paysSearch == null)
+            paysSearch = new Pays();
+
+        if(continent == null)
+            return;
+        if(paysSearch.getContinent() != null && paysSearch.getContinent().equals(continent))
+            return;
+
+        paysSearch.setContinent(continent);
+        this.pays.setAll(paysDAO.getLike(paysSearch));
+        this.pays.add(0,new Pays(0, "Pays (" + pays.size() + ")", null));
+    }
+
+    public void populateMarques(Fabricant fabricant) {
+        if(marqueSearch == null)
+            marqueSearch = new Marque();
+
+        if(fabricant == null) return;
+
+        if(marqueSearch.getFabricant() != null && marqueSearch.getFabricant().equals(fabricant)) return;
+
+        marqueSearch.setFabricant(fabricant);
+        this.marques.setAll(marqueDAO.getLike(marqueSearch));
+        this.marques.add(0,new Marque(0, "Marque (" + marques.size() + ")", null, null));
+    }
+
     public void getArticlesByCouleur(Couleur newCouleur) {
         if(articleSearch.getCouleur() != null && articleSearch.getCouleur().equals(newCouleur))
             return;
@@ -220,6 +249,7 @@ public class ArticleBean {
             return;
         if(changeInMin)
             currentTitrage.setMin(min);
+
         if(changeInMax)
             currentTitrage.setMax(max);
 

@@ -9,7 +9,9 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -34,8 +36,11 @@ public class VenteStatisticsController {
     @FXML
     private TableColumn<Vendre, String> totaleCol;
     private String[] months = {"Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"};
+    private ObservableList<String> monthsForChart = FXCollections.observableArrayList(months);
     @FXML
-    private LineChart venteLineChart;
+    private LineChart<String, Number> venteLineChart;
+    @FXML
+    private CategoryAxis xAxis;
     @FXML
     private Label periodeText;
     @FXML
@@ -51,7 +56,6 @@ public class VenteStatisticsController {
     @FXML
     private void initialize() {
         venteSeries = FXCollections.observableArrayList();
-        //venteLineChart.setCreateSymbols(false);
 
         anneeCol.setCellValueFactory(cell -> cell.getValue().anneeProperty().asString());
         idCol.setCellValueFactory(cell -> cell.getValue().idArticleProperty().asString());
@@ -59,6 +63,15 @@ public class VenteStatisticsController {
         qteCol.setCellValueFactory(cell -> cell.getValue().quantiteProperty().asString());
         totaleCol.setCellValueFactory(cell -> cell.getValue().totaleProperty());
 
+        xAxis.setCategories(monthsForChart);
+
+        box2014.setOnAction(e -> {
+            constructLineChartPerLot();
+        });
+
+        box2019.setOnAction(e -> {
+            constructLineChartPerLot();
+        });
 
     }
 
@@ -70,19 +83,11 @@ public class VenteStatisticsController {
         sortedVentesDesArticles.comparatorProperty().bind(venteDesArticlesView.comparatorProperty());
         venteDesArticlesView.setItems(this.sortedVentesDesArticles);
 
-        /*for(int i = 5; i < 9; i++)
-            constructLineChart(venteSeries.get(i));*/
-        box2014.setOnAction(e -> {
-            if(box2014.isSelected())
-                constructLineChartPerLot(0, 5);
-            else clearSeries(0, 5);
-        });
+        // initialize chart with recent data
+        for(int i = 5; i < 9; i++)
+            constructSeries(venteSeries.get(i));
+        box2019.setSelected(true);
 
-        box2019.setOnAction(e -> {
-            if(box2019.isSelected())
-                constructLineChartPerLot(5, 9);
-            else clearSeries(5, 9);
-        });
 
     }
 
@@ -98,12 +103,12 @@ public class VenteStatisticsController {
                 series.getData().add(data);
                 data.getNode().setOnMouseClicked(e -> setDetails(data.getXValue() + " " + venteSerie.getName(), data.getYValue().toString(), venteSerie.getCA()));
                 data.getNode().setCursor(Cursor.HAND);
-
             }
         }
 
         series.getNode().setOnMouseClicked(e -> vendreBean.getVentesByYearForArticles(Integer.parseInt(venteSerie.getName())));
         series.getNode().setCursor(Cursor.HAND);
+
     }
 
     private void setDetails(String period, String qteTotale, String ca) {
@@ -118,15 +123,27 @@ public class VenteStatisticsController {
 
     }
 
-    private void constructLineChartPerLot(int from, int to) {
-        if(box2014.isSelected() && box2019.isSelected()) {
-            from = 0;
-            to = 9;
+    private void constructLineChartPerLot() {
+        if(!box2014.isSelected() && !box2019.isSelected()) {
+            venteLineChart.getData().clear();
+            return;
         }
 
-        for(int i = from; i < to; i++)
-            constructSeries(venteSeries.get(i));
+        int from = 0;
+        int to = venteSeries.size();
+        if(box2014.isSelected() && !box2019.isSelected())
+            to = 5;
 
+        if(!box2014.isSelected() && box2019.isSelected())
+            from = 5;
+
+        venteLineChart.getData().clear();
+
+        for(int i = from; i < to; i++) {
+           constructSeries(venteSeries.get(i));
+        }
+
+        //venteLineChart.getXAxis().setAutoRanging(true);
     }
 
     private void clearSeries(int from, int to) {
@@ -136,3 +153,24 @@ public class VenteStatisticsController {
             venteLineChart.getData().remove(0, from - 1);
     }
 }
+
+/*ObservableList<XYChart.Series> seriesList = FXCollections.observableArrayList();
+        for(int i = from; i < to; i++) {
+            VenteSerie venteSerie = venteSeries.get(i);
+            XYChart.Series series = constructSeries(venteSerie);
+            seriesList.add(series);
+        }
+
+        venteLineChart.getData().addAll(seriesList);
+
+        /*for(int i = 0; i < venteLineChart.getData().size(); i++) {
+            int index = i;
+            XYChart.Series series = (XYChart.Series) venteLineChart.getData().get(index);
+            for(int j = 0 ; j < series.getData().size(); j++) {
+                XYChart.Data data = (XYChart.Data)series.getData().get(j);
+                data.getNode().setOnMouseClicked(e -> setDetails(data.getXValue() + " " + venteSeries.get(index).getName(), data.getYValue().toString(), venteSeries.get(index).getCA()));
+                data.getNode().setCursor(Cursor.HAND);
+            }
+            series.getNode().setOnMouseClicked(e -> vendreBean.getVentesByYearForArticles(Integer.parseInt(venteSeries.get(index).getName())));
+            series.getNode().setCursor(Cursor.HAND);
+        }*/

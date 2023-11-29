@@ -90,10 +90,20 @@ public class MainViewController {
         couleurSearchBox.valueProperty().addListener((ob, o, n) -> bean.getArticlesByCouleur((Couleur) n));
         typeSearchBox.valueProperty().addListener((ob, o, n) -> bean.getArticlesByType((Type) n));
         marqueSearchBox.valueProperty().addListener((ob, o, n) -> bean.getArticlesByMarque((Marque) n));
-        fabricantSearchBox.valueProperty().addListener((ob, o, n) -> bean.getArticlesByFabricant((Fabricant) n));
+        fabricantSearchBox.valueProperty().addListener((ob, o, n) -> {
+            bean.getArticlesByFabricant((Fabricant) n);
+            bean.populateMarques((Fabricant) n);
+            marqueSearchBox.getSelectionModel().selectFirst();
+        });
         paysSearchBox.valueProperty().addListener((ob, o, n) -> bean.getArticlesByPays((Pays) n));
-        continentSearchBox.valueProperty().addListener((ob, o, n) -> bean.getArticlesByContinent((Continent) n));
+        continentSearchBox.valueProperty().addListener((ob, o, n) ->{
+            bean.getArticlesByContinent((Continent) n);
+            bean.populatePays((Continent) n);
+            paysSearchBox.getSelectionModel().selectFirst();
+        });
         contenanceSearchBox.valueProperty().addListener((ob, o, n) -> bean.getArticlesByVolume((Volume) n));
+
+        titrageSlider.highValueProperty().set(30);
 
         titrageSlider.lowValueProperty().addListener((ob, o, n) -> {
             if(!titrageSlider.isLowValueChanging())
@@ -125,7 +135,6 @@ public class MainViewController {
 
     @FXML
     private void handleModifyClicked() {
-
         Article selectedArticle = articlesTable.getSelectionModel().getSelectedItem();
         if(selectedArticle == null) return;
         Article originalVer = createACopyOfArticle(selectedArticle);

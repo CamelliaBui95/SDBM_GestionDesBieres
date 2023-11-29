@@ -20,6 +20,11 @@ public class Marque {
         this.fabricant = new Fabricant();
     }
 
+    public Marque() {
+        this.id = 0;
+        this.nomMarque = "";
+    }
+
     public int getId() {
         return id;
     }

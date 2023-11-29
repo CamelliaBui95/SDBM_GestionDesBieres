@@ -3,6 +3,8 @@ package fr.btn.sdbm.dao;
 import fr.btn.sdbm.metier.Continent;
 import fr.btn.sdbm.metier.Pays;
 
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -32,8 +34,25 @@ public class PaysDAO extends DAO<Pays, Pays>{
     }
 
     @Override
-    public ArrayList<Pays> getLike(Pays objet) {
-        return null;
+    public ArrayList<Pays> getLike(Pays pays) {
+        ArrayList<Pays> paysList = new ArrayList<>();
+        String request = "{call ps_searchPays(?)}";
+        try {
+            PreparedStatement stmt = connection.prepareCall(request);
+            stmt.setInt(1, pays.getContinent().getId());
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                int idPays = rs.getInt(1);
+                String nomPays = rs.getString(2);
+                int idContinent = rs.getInt(3);
+                Continent continent = getContinentForPays(idContinent);
+                paysList.add(new Pays(idPays, nomPays, continent));
+            }
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return paysList;
     }
 
     @Override

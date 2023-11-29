@@ -25,7 +25,7 @@
                <children>
                   <LineChart fx:id="venteLineChart" layoutX="215.0" layoutY="60.0" prefHeight="363.0" prefWidth="758.0" title="SDBM - Ventes Stats">
                     <xAxis>
-                      <CategoryAxis side="BOTTOM" />
+                      <CategoryAxis side="BOTTOM" fx:id="xAxis" />
                     </xAxis>
                     <yAxis>
                       <NumberAxis side="LEFT" />

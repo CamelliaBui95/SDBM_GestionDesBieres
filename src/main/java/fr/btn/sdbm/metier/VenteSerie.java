@@ -7,7 +7,6 @@ import java.util.HashMap;
 
 public class VenteSerie {
     private String name;
-
     private String CA;
     private HashMap<String, Long> venteSerieData;
     // mois + quantite
@@ -39,10 +38,6 @@ public class VenteSerie {
 
     public HashMap<String, Long> getVenteSerieData() {
         return venteSerieData;
-    }
-
-    public void setVenteSerieData(HashMap<String, Long> venteSerieData) {
-        this.venteSerieData = venteSerieData;
     }
 
     @Override
