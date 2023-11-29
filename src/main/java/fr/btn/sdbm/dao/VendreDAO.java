@@ -39,7 +39,7 @@ public class VendreDAO extends DAO<Vendre, VendreSearch>{
 
     public ArrayList<VenteSerie> getVentesSeriesPerMonthAndYear() {
         ArrayList<VenteSerie> venteSeries = new ArrayList<>();
-        String ps = "{call ps_showVentesFrom2014To2022_2}";
+        String ps = "{call ps_showVentesPerYear}";
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(ps);

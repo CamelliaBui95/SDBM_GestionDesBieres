@@ -6,19 +6,16 @@ import fr.btn.sdbm.service.VendreBean;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-
-import java.util.ArrayList;
+import javafx.scene.layout.VBox;
 
 public class VenteStatisticsController {
     private VendreBean vendreBean;
@@ -35,6 +32,8 @@ public class VenteStatisticsController {
     private TableColumn<Vendre, String> qteCol;
     @FXML
     private TableColumn<Vendre, String> totaleCol;
+    @FXML
+    private VBox trancheAnneeCol;
     private String[] months = {"Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"};
     private ObservableList<String> monthsForChart = FXCollections.observableArrayList(months);
     @FXML
@@ -51,6 +50,8 @@ public class VenteStatisticsController {
     private CheckBox box2014;
     @FXML
     private CheckBox box2019;
+
+    private int currentYearForDisplay;
 
     private SortedList<Vendre> sortedVentesDesArticles;
     @FXML
@@ -72,7 +73,6 @@ public class VenteStatisticsController {
         box2019.setOnAction(e -> {
             constructLineChartPerLot();
         });
-
     }
 
     public void setVendreBean(VendreBean vendreBean) {
@@ -83,32 +83,35 @@ public class VenteStatisticsController {
         sortedVentesDesArticles.comparatorProperty().bind(venteDesArticlesView.comparatorProperty());
         venteDesArticlesView.setItems(this.sortedVentesDesArticles);
 
-        // initialize chart with recent data
-        for(int i = 5; i < 9; i++)
-            constructSeries(venteSeries.get(i));
-        box2019.setSelected(true);
-
-
+        setUpDefaultDisplay();
     }
 
     private void constructSeries(VenteSerie venteSerie) {
         XYChart.Series series = new XYChart.Series();
         series.setName(venteSerie.getName());
         venteLineChart.getData().add(series);
+        int seriesIndex = venteLineChart.getData().size() - 1;
 
+        int serieAnnee = Integer.parseInt(venteSerie.getName());
         for(int i = 0; i < months.length; i++) {
             if(venteSerie.getVenteSerieData().get(months[i]) > 0) {
                 XYChart.Data data = new XYChart.Data<>(months[i], venteSerie.getVenteSerieData().get(months[i]));
 
                 series.getData().add(data);
-                data.getNode().setOnMouseClicked(e -> setDetails(data.getXValue() + " " + venteSerie.getName(), data.getYValue().toString(), venteSerie.getCA()));
+                data.getNode().setOnMouseClicked(e -> {
+                    setDetails(data.getXValue() + " " + venteSerie.getName(), data.getYValue().toString(), venteSerie.getCA());
+                    //updateVenteDesArticlesView(serieAnnee);
+                    updateChartUI(serieAnnee, seriesIndex);
+                });
                 data.getNode().setCursor(Cursor.HAND);
             }
         }
 
-        series.getNode().setOnMouseClicked(e -> vendreBean.getVentesByYearForArticles(Integer.parseInt(venteSerie.getName())));
+        series.getNode().setOnMouseClicked(e -> {
+            updateVenteDesArticlesView(serieAnnee);
+            updateChartUI(serieAnnee, seriesIndex);
+        });
         series.getNode().setCursor(Cursor.HAND);
-
     }
 
     private void setDetails(String period, String qteTotale, String ca) {
@@ -118,11 +121,6 @@ public class VenteStatisticsController {
     }
 //pressedProperty on titrage slider
 
-    @FXML
-    private void handleBoxChecked(Event e) {
-
-    }
-
     private void constructLineChartPerLot() {
         if(!box2014.isSelected() && !box2019.isSelected()) {
             venteLineChart.getData().clear();
@@ -131,26 +129,65 @@ public class VenteStatisticsController {
 
         int from = 0;
         int to = venteSeries.size();
-        if(box2014.isSelected() && !box2019.isSelected())
+        if(box2014.isSelected() && !box2019.isSelected()) {
+            updateVenteDesArticlesView(2018);
             to = 5;
-
-        if(!box2014.isSelected() && box2019.isSelected())
+        }
+        else if(!box2014.isSelected() && box2019.isSelected()) {
+            updateVenteDesArticlesView(2022);
             from = 5;
+        }
+        else if(box2014.isSelected() && box2019.isSelected())
+            updateVenteDesArticlesView(2022);
 
         venteLineChart.getData().clear();
 
-        for(int i = from; i < to; i++) {
+        for(int i = from; i < to; i++)
            constructSeries(venteSeries.get(i));
-        }
-
-        //venteLineChart.getXAxis().setAutoRanging(true);
     }
 
-    private void clearSeries(int from, int to) {
-        if(venteLineChart.getData().size() == to)
-            venteLineChart.getData().remove(from, to);
-        else if(venteLineChart.getData().size() == from - 1)
-            venteLineChart.getData().remove(0, from - 1);
+    private void setUpDefaultDisplay() {
+        currentYearForDisplay = Integer.parseInt(venteSeries.get(venteSeries.size() - 1).getName());
+        vendreBean.getVentesByYearForArticles(currentYearForDisplay);
+        // initialize chart with recent data
+        for(int i = 5; i < 9; i++)
+            constructSeries(venteSeries.get(i));
+        box2019.setSelected(true);
+    }
+
+    private void updateVenteDesArticlesView(int annee) {
+        if(currentYearForDisplay == annee)
+            return;
+
+        currentYearForDisplay = annee;
+        vendreBean.getVentesByYearForArticles(currentYearForDisplay);
+    }
+
+    private void updateSeriesUI(int selectedSeriesIndex) {
+        XYChart.Series<String, Number> selectedSeries = venteLineChart.getData().get(selectedSeriesIndex);
+        selectedSeries.nodeProperty().get().setStyle("-fx-opacity: 1;");
+
+        for(int j = 0; j < selectedSeries.getData().size(); j++) {
+            XYChart.Data<String, Number> data = selectedSeries.getData().get(j);
+            data.getNode().setStyle("-fx-opacity: 1;");
+        }
+
+        for(int i = 0; i < venteLineChart.getData().size(); i++) {
+            XYChart.Series<String, Number> series = venteLineChart.getData().get(i);
+            if(!series.equals(selectedSeries)) {
+                series.nodeProperty().get().setStyle("-fx-opacity: 0.1;");
+
+                for(int j = 0; j < series.getData().size(); j++) {
+                    XYChart.Data<String, Number> data = series.getData().get(j);
+                    data.getNode().setStyle("-fx-opacity: 0.1;");
+                }
+            }
+        }
+    }
+
+    private void updateChartUI(int annee, int selectedSeriesIndex) {
+        updateVenteDesArticlesView(annee);
+        updateSeriesUI(selectedSeriesIndex);
     }
 }
 
