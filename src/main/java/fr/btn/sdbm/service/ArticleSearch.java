@@ -10,7 +10,7 @@ public class ArticleSearch {
     private Fabricant fabricant;
     private Pays pays;
     private Type type;
-    private Volume volume;
+    private Integer volume;
 
     private Titrage titrage = new Titrage(0, 30);
 
@@ -70,11 +70,11 @@ public class ArticleSearch {
         this.type = type;
     }
 
-    public Volume getVolume() {
+    public Integer getVolume() {
         return volume;
     }
 
-    public void setVolume(Volume volume) {
+    public void setVolume(Integer volume) {
         this.volume = volume;
     }
 

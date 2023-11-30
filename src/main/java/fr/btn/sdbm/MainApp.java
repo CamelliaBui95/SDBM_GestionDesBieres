@@ -66,9 +66,9 @@ public class MainApp extends Application {
             controller.setDialogStage(dialogStage);
             controller.setArticle(article);
 
-            controller.setCouleurs(articleBean.getFilteredCouleurs());
-            controller.setTypes(articleBean.getFilteredTypes());
-            controller.setMarques(articleBean.getFilteredMarques());
+            controller.setCouleurs(articleBean.getCouleurs());
+            controller.setTypes(articleBean.getTypes());
+            controller.setMarques(articleBean.getMarques());
 
             dialogStage.setResizable(false);
             dialogStage.showAndWait();

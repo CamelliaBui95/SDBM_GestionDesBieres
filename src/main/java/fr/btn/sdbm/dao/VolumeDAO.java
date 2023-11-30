@@ -1,22 +1,20 @@
 package fr.btn.sdbm.dao;
 
-import fr.btn.sdbm.metier.Volume;
-
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class VolumeDAO extends DAO<Volume, Volume>{
+public class VolumeDAO extends DAO<Integer, Integer>{
     @Override
-    public ArrayList<Volume> getAll() {
-        ArrayList<Volume> volumes = new ArrayList<>();
+    public ArrayList<Integer> getAll() {
+        ArrayList<Integer> volumes = new ArrayList<>();
         String request = "SELECT ROW_NUMBER() OVER ( ORDER BY VOLUME) AS ID_VOLUME, VOLUME FROM ARTICLE GROUP BY VOLUME;";
 
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(request);
             while(rs.next())
-                volumes.add(new Volume(rs.getInt(1), Integer.toString(rs.getInt(2))));
+                volumes.add(rs.getInt(2));
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -24,22 +22,22 @@ public class VolumeDAO extends DAO<Volume, Volume>{
     }
 
     @Override
-    public ArrayList<Volume> getLike(Volume objet) {
+    public ArrayList<Integer> getLike(Integer volume) {
         return null;
     }
 
     @Override
-    public boolean update(Volume objet) {
+    public boolean update(Integer objet) {
         return false;
     }
 
     @Override
-    public boolean post(Volume object) {
+    public boolean post(Integer object) {
         return false;
     }
 
     @Override
-    public boolean delete(Volume object) {
+    public boolean delete(Integer object) {
         return false;
     }
 }

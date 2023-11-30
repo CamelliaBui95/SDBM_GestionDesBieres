@@ -50,8 +50,8 @@ public class VenteStatisticsController {
     private CheckBox box2014;
     @FXML
     private CheckBox box2019;
-
     private int currentYearForDisplay;
+    private boolean chartClicked = true;
 
     private SortedList<Vendre> sortedVentesDesArticles;
     @FXML
@@ -73,6 +73,7 @@ public class VenteStatisticsController {
         box2019.setOnAction(e -> {
             constructLineChartPerLot();
         });
+
     }
 
     public void setVendreBean(VendreBean vendreBean) {
@@ -89,6 +90,7 @@ public class VenteStatisticsController {
     private void constructSeries(VenteSerie venteSerie) {
         XYChart.Series series = new XYChart.Series();
         series.setName(venteSerie.getName());
+
         venteLineChart.getData().add(series);
         int seriesIndex = venteLineChart.getData().size() - 1;
 
@@ -100,7 +102,6 @@ public class VenteStatisticsController {
                 series.getData().add(data);
                 data.getNode().setOnMouseClicked(e -> {
                     setDetails(data.getXValue() + " " + venteSerie.getName(), data.getYValue().toString(), venteSerie.getCA());
-                    //updateVenteDesArticlesView(serieAnnee);
                     updateChartUI(serieAnnee, seriesIndex);
                 });
                 data.getNode().setCursor(Cursor.HAND);
@@ -183,6 +184,27 @@ public class VenteStatisticsController {
                 }
             }
         }
+
+        chartClicked = false;
+    }
+
+    @FXML
+    private void handleShowAllTrends() {
+        if(chartClicked)
+            return;
+
+        for(int i = 0; i < venteLineChart.getData().size(); i++) {
+            XYChart.Series<String, Number> series = venteLineChart.getData().get(i);
+            series.nodeProperty().get().setStyle("-fx-opacity: 1;");
+
+            for(int j = 0; j < series.getData().size(); j++) {
+                XYChart.Data<String, Number> data = series.getData().get(j);
+                data.getNode().setStyle("-fx-opacity: 1;");
+
+            }
+        }
+
+        chartClicked = true;
     }
 
     private void updateChartUI(int annee, int selectedSeriesIndex) {

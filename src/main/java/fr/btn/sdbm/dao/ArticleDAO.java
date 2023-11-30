@@ -12,8 +12,7 @@ public class ArticleDAO extends DAO<Article, ArticleSearch> {
     public ArrayList<Article> getAll() {
         ArrayList<Article> articles = new ArrayList<>();
         String ps = "{call ps_allArticles}";
-        try {
-            CallableStatement cStmt = this.connection.prepareCall(ps);
+        try(CallableStatement cStmt = this.connection.prepareCall(ps)) {
             ResultSet rs = cStmt.executeQuery();
             while(rs.next()) {
                 Article article = new Article(rs.getInt(1), rs.getString(2), rs.getInt(3),
@@ -41,7 +40,7 @@ public class ArticleDAO extends DAO<Article, ArticleSearch> {
         ArrayList<Article> articles = new ArrayList<>();
         String spReq = "{call ps_searchArticles(?,?,?,?,?,?,?,?,?,?,?,?,?)}";
         String nomArticle = articleSearch.getNomArticle();
-        int volume = articleSearch.getVolume() == null || articleSearch.getVolume().getId() == 0 ? 0 : Integer.parseInt(articleSearch.getVolume().getVolume());
+        int volume = articleSearch.getVolume() == null || articleSearch.getVolume() == 0 ? 0 : articleSearch.getVolume();
         float titrageMin = articleSearch.getTitrage().getMin();
         float titrageMax = articleSearch.getTitrage().getMax();
         int idCouleur = articleSearch.getCouleur() == null ? 0 : articleSearch.getCouleur().getId();
@@ -50,8 +49,7 @@ public class ArticleDAO extends DAO<Article, ArticleSearch> {
         int idPays = articleSearch.getPays() == null ? 0 : articleSearch.getPays().getId();
         int idFabricant = articleSearch.getFabricant() == null ? 0 : articleSearch.getFabricant().getId();
         int idContinent = articleSearch.getContinent() == null ? 0 : articleSearch.getContinent().getId();
-        try {
-           CallableStatement stmt = connection.prepareCall(spReq);
+        try(CallableStatement stmt = connection.prepareCall(spReq)) {
            stmt.setString(1, nomArticle);
            stmt.setInt(2, volume);
            stmt.setFloat(3, titrageMin);
@@ -93,8 +91,7 @@ public class ArticleDAO extends DAO<Article, ArticleSearch> {
     @Override
     public boolean update(Article article) {
         String rq = "{call ps_modifierArticle(?,?,?,?,?,?,?,?,?)}";
-        try {
-            PreparedStatement stmt = connection.prepareStatement(rq, Statement.RETURN_GENERATED_KEYS);
+        try ( PreparedStatement stmt = connection.prepareStatement(rq, Statement.RETURN_GENERATED_KEYS)){
             stmt.setInt(1, article.getId());
             stmt.setString(2, article.getNomArticle());
             stmt.setFloat(3, article.getPrixAchat());
@@ -116,8 +113,7 @@ public class ArticleDAO extends DAO<Article, ArticleSearch> {
     @Override
     public boolean post(Article article) {
         String ps = "{call ps_insertArticle(?,?,?,?,?,?,?,?)}";
-        try {
-            PreparedStatement stmt = connection.prepareStatement(ps);
+        try(PreparedStatement stmt = connection.prepareStatement(ps)) {
             stmt.setString(1, article.getNomArticle());
             stmt.setFloat(2, article.getPrixAchat());
             stmt.setInt(3, article.getVolume());
@@ -137,8 +133,7 @@ public class ArticleDAO extends DAO<Article, ArticleSearch> {
     @Override
     public boolean delete(Article article) {
         String rq = "DELETE FROM ARTICLE WHERE ID_ARTICLE=?";
-        try {
-            PreparedStatement stmt = connection.prepareStatement(rq);
+        try(PreparedStatement stmt = connection.prepareStatement(rq)) {
             stmt.setInt(1, article.getId());
             stmt.executeUpdate();
             return true;

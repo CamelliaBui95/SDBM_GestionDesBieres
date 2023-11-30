@@ -1,7 +1,7 @@
 package fr.btn.sdbm.dao;
 
 import fr.btn.sdbm.metier.Vendre;
-import fr.btn.sdbm.metier.VendreSearch;
+import fr.btn.sdbm.service.VendreSearch;
 import fr.btn.sdbm.metier.VenteSerie;
 
 import java.sql.PreparedStatement;
@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 public class VendreDAO extends DAO<Vendre, VendreSearch>{
     @Override

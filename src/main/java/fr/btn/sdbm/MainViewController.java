@@ -2,16 +2,12 @@ package fr.btn.sdbm;
 
 import fr.btn.sdbm.metier.*;
 import fr.btn.sdbm.service.ArticleBean;
-import javafx.collections.FXCollections;
-import javafx.collections.transformation.FilteredList;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.controlsfx.control.RangeSlider;
 import org.controlsfx.control.SearchableComboBox;
-
-import java.util.ArrayList;
 
 public class MainViewController {
     @FXML
@@ -55,19 +51,19 @@ public class MainViewController {
     @FXML
     private TextField searchField;
     @FXML
-    private SearchableComboBox couleurSearchBox;
+    private SearchableComboBox<Couleur> couleurSearchBox;
     @FXML
-    private SearchableComboBox typeSearchBox;
+    private SearchableComboBox<Type> typeSearchBox;
     @FXML
-    private SearchableComboBox paysSearchBox;
+    private SearchableComboBox<Pays> paysSearchBox;
     @FXML
-    private SearchableComboBox continentSearchBox;
+    private SearchableComboBox<Continent> continentSearchBox;
     @FXML
-    private SearchableComboBox fabricantSearchBox;
+    private SearchableComboBox<Fabricant> fabricantSearchBox;
     @FXML
-    private SearchableComboBox marqueSearchBox;
+    private SearchableComboBox<Marque> marqueSearchBox;
     @FXML
-    private SearchableComboBox contenanceSearchBox;
+    private SearchableComboBox<String> contenanceSearchBox;
     @FXML
     private RangeSlider titrageSlider;
 
@@ -101,7 +97,12 @@ public class MainViewController {
             bean.populatePays((Continent) n);
             paysSearchBox.getSelectionModel().selectFirst();
         });
-        contenanceSearchBox.valueProperty().addListener((ob, o, n) -> bean.getArticlesByVolume((Volume) n));
+        contenanceSearchBox.valueProperty().addListener((ob, o, n) -> {
+            if(contenanceSearchBox.getSelectionModel().getSelectedIndex() == 0)
+                bean.getArticlesByVolume("0");
+            else
+                bean.getArticlesByVolume(n);
+        });
 
         titrageSlider.highValueProperty().set(30);
 
@@ -113,16 +114,15 @@ public class MainViewController {
             if(!titrageSlider.isHighValueChanging())
                 bean.getArticlesByTitrage(0, n.floatValue(), false, true);
         });
-
     }
     private void showArticleDetail(Article article) {
         if(article == null)
             return;
 
-        idText.setText(Integer.toString(article.getId()));
+        idText.setText(java.lang.Integer.toString(article.getId()));
         libelleText.setText(article.getNomArticle());
         prixText.setText(Float.toString(article.getPrixAchat()));
-        volumeText.setText(Integer.toString(article.getVolume()));
+        volumeText.setText(java.lang.Integer.toString(article.getVolume()));
         titrageText.setText(Float.toString(article.getTitrage()));
         marqueText.setText(article.getMarque());
         fabricantText.setText(article.getFabricant());
@@ -130,7 +130,7 @@ public class MainViewController {
         continentText.setText(article.getContinent());
         couleurText.setText(article.getCouleur());
         typeText.setText(article.getType());
-        stockText.setText(Integer.toString(article.getStock()));
+        stockText.setText(java.lang.Integer.toString(article.getStock()));
     }
 
     @FXML
@@ -142,8 +142,16 @@ public class MainViewController {
         boolean isOkClicked = mainApp.showArticleNewEditDialog("Modifier Article N°" + selectedArticle.getId(), selectedArticle);
         if(isOkClicked) {
             boolean isUpdated = bean.updateArticle(selectedArticle, originalVer);
-            if(isUpdated)
+            if(isUpdated) {
+                ObservableList<String> volumes = bean.getVolumes();
+                if(!volumes.contains(Integer.toString(selectedArticle.getVolume()))) {
+                    //bean.getVolumes().set(0, "Contenance (" + volumes.size() + ")");
+                    //bean.getVolumes().add(Integer.toString(selectedArticle.getVolume()));
+                    bean.updateVolumeList();
+
+                }
                 showArticleDetail(selectedArticle);
+            }
             else showArticleDetail(originalVer);
         }
     }
@@ -183,20 +191,20 @@ public class MainViewController {
         this.articleSortedList.comparatorProperty().bind(articlesTable.comparatorProperty());
         articlesTable.setItems(this.articleSortedList);
 
-       this.couleurSearchBox.setItems(this.bean.getFilteredCouleurs());
-       this.typeSearchBox.setItems(this.bean.getFilteredTypes());
-       this.paysSearchBox.setItems(this.bean.getFilteredPays());
-       this.continentSearchBox.setItems(this.bean.getFilteredContinents());
-       this.fabricantSearchBox.setItems(this.bean.getFilteredFabricants());
-       this.marqueSearchBox.setItems(this.bean.getFilteredMarques());
-       this.contenanceSearchBox.setItems(this.bean.getFilteredVolumes());
+       this.couleurSearchBox.setItems(this.bean.getCouleurs());
+       this.typeSearchBox.setItems(this.bean.getTypes());
+       this.paysSearchBox.setItems(this.bean.getPays());
+       this.continentSearchBox.setItems(this.bean.getContinents());
+       this.fabricantSearchBox.setItems(this.bean.getFabricants());
+       this.marqueSearchBox.setItems(this.bean.getMarques());
+       this.contenanceSearchBox.setItems(this.bean.getVolumes());
 
        setDefaultSelect();
 
     }
 
     public void setResultCount(int count) {
-        this.resultCount.setText(Integer.toString(count));
+        this.resultCount.setText(java.lang.Integer.toString(count));
     }
 
     private void setDefaultSelect() {
